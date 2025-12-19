@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    font-family: 'Playfair Display', serif;
+    background: 
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.overlay {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 50px 60px;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: fadeIn 2s ease;
+}
+
+h1 {
+    font-family: 'Parisienne', cursive;
+    font-size: 48px;
+    color: #c1121f;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 40px;
+}
+
+.signature {
+    font-family: 'Parisienne', cursive;
+    font-size: 26px;
+    color: #c1121f;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
