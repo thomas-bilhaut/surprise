@@ -230,8 +230,13 @@
             }
 
             .slider {
-                width: 95vw;
-                height: 60vh;
+                width: 90vw;
+                height: 50vh;
+            }
+
+            .slide {
+                max-width: 90%;
+                max-height: 90%;
             }
 
             .dot {
@@ -267,7 +272,12 @@
             }
 
             .slider {
-                height: 55vh;
+                height: 45vh;
+            }
+
+            .slide {
+                max-width: 85%;
+                max-height: 85%;
             }
         }
     </style>
@@ -327,7 +337,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
-    let isSwiping = false;
 
     // Fonction pour changer de slide
     function changeSlide(direction = 1) {
@@ -372,40 +381,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
     });
 
-    // Gestion du swipe tactile - touchstart
-    sliderContainer.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        isSwiping = true;
-    }, { passive: true });
+    // Gestion du swipe tactile
+    document.addEventListener("touchstart", (e) => {
+        if (sliderContainer.classList.contains("visible")) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }
+    });
 
-    // Gestion du swipe tactile - touchmove
-    sliderContainer.addEventListener("touchmove", (e) => {
-        if (!isSwiping) return;
-        touchEndX = e.touches[0].clientX;
-        touchEndY = e.touches[0].clientY;
-    }, { passive: true });
-
-    // Gestion du swipe tactile - touchend
-    sliderContainer.addEventListener("touchend", (e) => {
-        if (!isSwiping) return;
-        isSwiping = false;
-        handleSwipe();
-    }, { passive: true });
+    document.addEventListener("touchend", (e) => {
+        if (sliderContainer.classList.contains("visible")) {
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
+            handleSwipe();
+        }
+    });
 
     function handleSwipe() {
-        const swipeThreshold = 50;
         const diffX = touchStartX - touchEndX;
         const diffY = Math.abs(touchStartY - touchEndY);
+        const swipeThreshold = 30;
         
-        // Vérifier que c'est un swipe horizontal (et pas vertical)
-        if (diffY < 100) {
-            if (diffX > swipeThreshold) {
+        // Vérifier que c'est un swipe horizontal
+        if (diffY < 80 && Math.abs(diffX) > swipeThreshold) {
+            if (diffX > 0) {
                 // Swipe vers la gauche - image suivante
                 clearInterval(sliderInterval);
                 changeSlide(1);
                 sliderInterval = setInterval(() => changeSlide(1), 3500);
-            } else if (diffX < -swipeThreshold) {
+            } else {
                 // Swipe vers la droite - image précédente
                 clearInterval(sliderInterval);
                 changeSlide(-1);
