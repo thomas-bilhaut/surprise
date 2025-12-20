@@ -16,7 +16,7 @@
             height: 100vh;
             font-family: 'Playfair Display', serif;
             background: 
-                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                linear-gradient(135deg, rgba(20, 20, 40, 0.85), rgba(60, 40, 80, 0.85)),
                 url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34");
             background-size: cover;
             background-position: center;
@@ -50,25 +50,30 @@
 
         h1 {
             font-family: 'Parisienne', cursive;
-            font-size: 48px;
+            font-size: 56px;
             color: white;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.7);
+            letter-spacing: 2px;
         }
 
         h2 {
-            font-size: 26px;
-            color: white;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 32px;
+            color: #ffd700;
+            margin-bottom: 35px;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.6);
+            font-weight: 400;
         }
 
         p {
-            font-size: 18px;
-            line-height: 1.8;
+            font-size: 20px;
+            line-height: 2;
             color: white;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 45px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @keyframes fadeIn {
@@ -84,48 +89,54 @@
 
         /* Contenu texte */
         .text-content {
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            backdrop-filter: blur(2px);
+            padding: 30px;
+            border-radius: 20px;
         }
 
         .text-content.hidden {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-30px) scale(0.95);
             pointer-events: none;
             position: absolute;
         }
 
         /* Bouton pour démarrer le slider */
         .start-button {
-            background: #c1121f;
+            background: linear-gradient(135deg, #c1121f 0%, #8b0000 100%);
             color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 18px 45px;
+            font-size: 20px;
             font-family: 'Playfair Display', serif;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(193, 18, 31, 0.3);
+            box-shadow: 0 8px 25px rgba(193, 18, 31, 0.4);
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .start-button:hover {
-            background: #9a0e1a;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(193, 18, 31, 0.4);
+            background: linear-gradient(135deg, #e01428 0%, #a01010 100%);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(193, 18, 31, 0.6);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .slider {
             position: relative;
-            width: auto;
-            max-width: 95vw;
-            height: auto;
-            max-height: 85vh;
+            width: 85vw;
+            max-width: 1400px;
+            height: 75vh;
             margin: 0 auto;
-            overflow: visible;
-            border-radius: 15px;
+            overflow: hidden;
+            border-radius: 0;
             display: none;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            box-shadow: none;
+            background: transparent;
         }
 
         .slider.visible {
@@ -134,15 +145,17 @@
 
         .slide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
             height: auto;
-            max-height: 85vh;
             object-fit: contain;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
-            border-radius: 15px;
+            transition: opacity 1.2s ease-in-out;
+            filter: brightness(1.05) contrast(1.05);
         }
 
         .slide.active {
@@ -163,21 +176,26 @@
         }
 
         .dot {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .dot:hover {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 215, 0, 0.8);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.1);
         }
 
         .dot.active {
-            background: white;
-            transform: scale(1.3);
+            background: #ffd700;
+            border-color: rgba(255, 215, 0, 0.8);
+            transform: scale(1.4);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
         }
 
         @media (max-width: 600px) {
@@ -254,18 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentSlide = 0;
     let sliderInterval = null;
 
-    // Ajuster la hauteur du slider en fonction de la première image
-    function adjustSliderHeight() {
-        const firstImg = slides[0];
-        if (firstImg.complete) {
-            sliderContainer.style.height = firstImg.offsetHeight + 'px';
-        } else {
-            firstImg.onload = () => {
-                sliderContainer.style.height = firstImg.offsetHeight + 'px';
-            };
-        }
-    }
-
     // Fonction pour changer de slide
     function changeSlide() {
         slides[currentSlide].classList.remove("active");
@@ -286,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             sliderContainer.classList.add("visible");
             sliderDots.classList.add("visible");
-            adjustSliderHeight();
             
             // Démarrer le défilement automatique
             if (slides.length > 1) {
