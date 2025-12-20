@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Une surprise pour toi ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&display=swap" rel="stylesheet">
+    <title>Notre aventure à Paris ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,70 +13,380 @@
         }
 
         body {
-            height: 100vh;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             background: 
                 linear-gradient(135deg, rgba(20, 20, 40, 0.85), rgba(60, 40, 80, 0.85)),
                 url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
         }
 
-        .overlay {
+        /* Particles d'étoiles */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Container principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 20px;
         }
 
-        .card {
-            background: transparent;
-            padding: 0;
-            max-width: 95vw;
-            width: 100%;
-            height: 90vh;
+        /* Section d'introduction */
+        .intro-section {
             text-align: center;
+            max-width: 800px;
+            animation: fadeInUp 1.5s ease;
+            transition: all 0.6s ease;
+        }
+
+        .intro-section.hidden {
+            opacity: 0;
+            transform: translateY(-50px);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .main-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(48px, 8vw, 80px);
+            background: linear-gradient(135deg, #ff6b9d 0%, #feca57 50%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: shimmer 3s infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        .subtitle {
+            font-size: clamp(24px, 4vw, 36px);
+            color: #feca57;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(254, 202, 87, 0.5);
+        }
+
+        .intro-text {
+            font-size: clamp(18px, 2.5vw, 24px);
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .discover-btn {
+            background: linear-gradient(135deg, #ee5a6f 0%, #c44569 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(238, 90, 111, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discover-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .discover-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .discover-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(238, 90, 111, 0.6);
+        }
+
+        /* Galerie */
+        .gallery-section {
+            display: none;
+            width: 100%;
+            max-width: 1400px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .gallery-section.visible {
+            display: block;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .gallery-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(36px, 6vw, 56px);
+            color: #feca57;
+            margin-bottom: 15px;
+        }
+
+        .gallery-subtitle {
+            font-size: clamp(18px, 2.5vw, 24px);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Slider moderne */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            aspect-ratio: 16/10;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             border-radius: 0;
             box-shadow: none;
-            animation: fadeIn 2s ease;
+            background: transparent;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            cursor: pointer;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: transparent;
+        }
+
+        /* Boutons de navigation */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            user-select: none;
         }
 
-        h1 {
-            font-family: 'Parisienne', cursive;
-            font-size: 56px;
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-btn.prev {
+            left: 20px;
+        }
+
+        .nav-btn.next {
+            right: 20px;
+        }
+
+        /* Indicateurs */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dot.active {
+            background: #feca57;
+            transform: scale(1.3);
+            border-color: rgba(254, 202, 87, 0.5);
+            box-shadow: 0 0 15px rgba(254, 202, 87, 0.6);
+        }
+
+        .dot:hover {
+            background: rgba(254, 202, 87, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Modal plein écran */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 95vw;
+            max-height: 95vh;
+            animation: zoomIn 0.4s ease;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 95vh;
+            object-fit: contain;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
             color: white;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.7);
-            letter-spacing: 2px;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1001;
         }
 
-        h2 {
-            font-size: 32px;
-            color: #ffd700;
-            margin-bottom: 35px;
-            text-shadow: 0 3px 10px rgba(0,0,0,0.6);
-            font-weight: 400;
+        .modal-close:hover {
+            background: rgba(238, 90, 111, 0.8);
+            transform: rotate(90deg);
         }
 
-        p {
-            font-size: 20px;
-            line-height: 2;
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
-            margin-bottom: 45px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1001;
         }
 
-        @keyframes fadeIn {
+        .modal-nav:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-nav.prev {
+            left: 20px;
+        }
+
+        .modal-nav.next {
+            right: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -87,453 +397,317 @@
             }
         }
 
-        /* Contenu texte */
-        .text-content {
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            backdrop-filter: blur(2px);
-            padding: 30px;
-            border-radius: 20px;
-        }
-
-        .text-content.hidden {
-            opacity: 0;
-            transform: translateY(-30px) scale(0.95);
-            pointer-events: none;
-            position: absolute;
-        }
-
-        /* Bouton pour démarrer le slider */
-        .start-button {
-            background: linear-gradient(135deg, #c1121f 0%, #8b0000 100%);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 18px 45px;
-            font-size: 20px;
-            font-family: 'Playfair Display', serif;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            margin: 20px 0;
-            box-shadow: 0 8px 25px rgba(193, 18, 31, 0.4);
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .start-button:hover {
-            background: linear-gradient(135deg, #e01428 0%, #a01010 100%);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(193, 18, 31, 0.6);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .slider {
-            position: relative;
-            width: 85vw;
-            max-width: 1400px;
-            height: 75vh;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 0;
-            display: none;
-            box-shadow: none;
-            background: transparent;
-            touch-action: pan-x;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        .slider.visible {
-            display: block;
-        }
-
-        .slide {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            filter: brightness(1.05) contrast(1.05);
-            cursor: pointer;
-        }
-
-        /* Modal pour image agrandie */
-        .image-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            cursor: zoom-out;
-        }
-
-        .image-modal.active {
-            display: flex;
-        }
-
-        .image-modal img {
-            max-width: 95vw;
-            max-height: 95vh;
-            object-fit: contain;
-            animation: zoomIn 0.3s ease;
-        }
-
-        @keyframes zoomIn {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 40px;
-            color: white;
-            cursor: pointer;
-            z-index: 10000;
-            background: rgba(0, 0, 0, 0.5);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .close-modal:hover {
-            background: rgba(193, 18, 31, 0.8);
-            transform: rotate(90deg);
-        }
-
-        .slide.active {
-            opacity: 1;
-        }
-
-        /* Indicateurs de slide */
-        .slider-dots {
-            display: none;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            z-index: 10;
-        }
-
-        .slider-dots.visible {
-            display: flex;
-        }
-
-        .dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.4s ease;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .dot:hover {
-            background: rgba(255, 215, 0, 0.8);
-            border-color: rgba(255, 215, 0, 0.6);
-            transform: scale(1.1);
-        }
-
-        .dot.active {
-            background: #ffd700;
-            border-color: rgba(255, 215, 0, 0.8);
-            transform: scale(1.4);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-        }
-
-        @media (max-width: 600px) {
-            .card {
-                padding: 0;
-                height: 100vh;
-            }
-
-            h1 {
-                font-size: 42px;
-                margin-bottom: 10px;
-            }
-
-            h2 {
-                font-size: 24px;
-                margin-bottom: 25px;
-            }
-
-            p {
-                font-size: 17px;
-                line-height: 1.8;
-                padding: 0 15px;
-                margin-bottom: 35px;
-            }
-
-            .start-button {
-                padding: 15px 35px;
-                font-size: 18px;
-            }
-
-            .slider {
-                width: 90vw;
-                height: 50vh;
-            }
-
-            .slide {
-                max-width: 90%;
-                max-height: 90%;
-            }
-
-            .dot {
-                width: 12px;
-                height: 12px;
-            }
-
-            .dot.active {
-                transform: scale(1.3);
-            }
-
-            .text-content {
-                padding: 20px 15px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 36px;
-            }
-
-            h2 {
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-btn, .modal-nav {
+                width: 40px;
+                height: 40px;
                 font-size: 20px;
             }
 
-            p {
-                font-size: 15px;
+            .nav-btn.prev, .modal-nav.prev {
+                left: 10px;
             }
 
-            .start-button {
-                padding: 12px 30px;
-                font-size: 16px;
+            .nav-btn.next, .modal-nav.next {
+                right: 10px;
             }
 
-            .slider {
-                height: 45vh;
+            .modal-close {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+                top: 10px;
+                right: 10px;
             }
 
-            .slide {
-                max-width: 85%;
-                max-height: 85%;
+            .discover-btn {
+                padding: 15px 35px;
+            }
+
+            .slider-container {
+                aspect-ratio: 4/3;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-text {
+                line-height: 1.6;
+            }
+
+            .dots-container {
+                gap: 8px;
+            }
+
+            .dot {
+                width: 10px;
+                height: 10px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Étoiles animées -->
+    <div class="stars" id="starsContainer"></div>
 
-<div class="overlay">
-    <div class="card">
-        <div class="text-content" id="textContent">
-            <h1>Une surprise t'attend… ✨</h1>
-            <h2>Direction Paris 🗼</h2>
-
-            <p>
-                Prépare ta valise,<br>
-                une ville magique nous attend.<br>
-                Des lumières, des rires, des souvenirs…<br>
+    <div class="container">
+        <!-- Section d'introduction -->
+        <div class="intro-section" id="introSection">
+            <h1 class="main-title">Une surprise pour toi ✨</h1>
+            <h2 class="subtitle">Destination : Paris 🗼</h2>
+            <p class="intro-text">
+                Prépare ta valise, mon amour...<br>
+                Une ville magique nous attend.<br>
+                Des lumières scintillantes, des rires partagés,<br>
+                et des souvenirs inoubliables à créer ensemble.<br>
                 <strong>Je t'emmène à Paris ❤️</strong>
             </p>
-
-            <button class="start-button" id="startBtn">Découvrir la surprise 💝</button>
+            <button class="discover-btn" id="discoverBtn">
+                <span style="position: relative; z-index: 1;">Découvrir notre aventure 💝</span>
+            </button>
         </div>
 
-        <!-- SLIDER -->
-        <div class="slider" id="sliderContainer">
-            <img src="carte.png" class="slide active" alt="Localisation">
-            <img src="chambre.avif" class="slide" alt="Chambre">
-            <img src="chambre2.avif" class="slide" alt="Chambre 2">
-            <img src="cuisine.avif" class="slide" alt="Cuisine">
-            <img src="sallebain.avif" class="slide" alt="Salle de bain">
-            <img src="jaccuzi.avif" class="slide" alt="Jacuzzi">
-        </div>
+        <!-- Section galerie -->
+        <div class="gallery-section" id="gallerySection">
+            <div class="gallery-header">
+                <h2 class="gallery-title">Notre petit nid parisien</h2>
+                <p class="gallery-subtitle">Un aperçu de notre cocon ✨</p>
+            </div>
 
-        <div class="slider-dots" id="sliderDots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <div class="slide active" data-index="0">
+                        <img src="carte.png" alt="Localisation Paris">
+                    </div>
+                    <div class="slide" data-index="1">
+                        <img src="chambre.avif" alt="Chambre romantique">
+                    </div>
+                    <div class="slide" data-index="2">
+                        <img src="chambre2.avif" alt="Chambre vue 2">
+                    </div>
+                    <div class="slide" data-index="3">
+                        <img src="cuisine.avif" alt="Cuisine moderne">
+                    </div>
+                    <div class="slide" data-index="4">
+                        <img src="sallebain.avif" alt="Salle de bain">
+                    </div>
+                    <div class="slide" data-index="5">
+                        <img src="jaccuzi.avif" alt="Jacuzzi détente">
+                    </div>
+
+                    <button class="nav-btn prev" id="prevBtn">‹</button>
+                    <button class="nav-btn next" id="nextBtn">›</button>
+                </div>
+
+                <div class="dots-container" id="dotsContainer"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal pour agrandir l'image -->
-<div class="image-modal" id="imageModal">
-    <span class="close-modal" id="closeModal">&times;</span>
-    <img id="modalImage" src="" alt="Image agrandie">
-</div>
+    <!-- Modal plein écran -->
+    <div class="modal" id="modal">
+        <button class="modal-close" id="modalClose">×</button>
+        <button class="modal-nav prev" id="modalPrev">‹</button>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Image agrandie">
+        </div>
+        <button class="modal-nav next" id="modalNext">›</button>
+    </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const startBtn = document.getElementById("startBtn");
-    const textContent = document.getElementById("textContent");
-    const sliderContainer = document.getElementById("sliderContainer");
-    const sliderDots = document.getElementById("sliderDots");
-    const slides = document.querySelectorAll(".slide");
-    const dots = document.querySelectorAll(".dot");
-    const imageModal = document.getElementById("imageModal");
-    const modalImage = document.getElementById("modalImage");
-    const closeModal = document.getElementById("closeModal");
-    let currentSlide = 0;
-    let sliderInterval = null;
-
-    // Variables pour le swipe
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-
-    // Fonction pour changer de slide
-    function changeSlide(direction = 1) {
-        slides[currentSlide].classList.remove("active");
-        dots[currentSlide].classList.remove("active");
-        
-        if (direction === 1) {
-            currentSlide = (currentSlide + 1) % slides.length;
-        } else {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    <script>
+        // Création des étoiles
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
         }
-        
-        slides[currentSlide].classList.add("active");
-        dots[currentSlide].classList.add("active");
-    }
 
-    // Fonction pour aller à une slide spécifique
-    function goToSlide(index) {
-        slides[currentSlide].classList.remove("active");
-        dots[currentSlide].classList.remove("active");
-        
-        currentSlide = index;
-        
-        slides[currentSlide].classList.add("active");
-        dots[currentSlide].classList.add("active");
-    }
+        // Variables
+        const introSection = document.getElementById('introSection');
+        const gallerySection = document.getElementById('gallerySection');
+        const discoverBtn = document.getElementById('discoverBtn');
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
 
-    // Démarrer le slider au clic sur le bouton
-    startBtn.addEventListener("click", () => {
-        // Masquer le texte
-        textContent.classList.add("hidden");
-        
-        // Attendre la fin de l'animation avant d'afficher le slider
-        setTimeout(() => {
-            sliderContainer.classList.add("visible");
-            sliderDots.classList.add("visible");
-            
-            // Démarrer le défilement automatique
-            if (slides.length > 1) {
-                sliderInterval = setInterval(() => changeSlide(1), 3500);
-            }
-        }, 500);
-    });
+        let currentIndex = 0;
+        let autoplayInterval = null;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-    // Agrandir l'image au clic
-    slides.forEach((slide) => {
-        slide.addEventListener("click", (e) => {
-            e.stopPropagation();
-            modalImage.src = slide.src;
-            imageModal.classList.add("active");
-            // Pause l'auto-play pendant la visualisation
-            clearInterval(sliderInterval);
+        // Créer les dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (index === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
         });
-    });
 
-    // Fermer le modal
-    function closeImageModal() {
-        imageModal.classList.remove("active");
-        // Relancer l'auto-play
-        if (slides.length > 1) {
-            sliderInterval = setInterval(() => changeSlide(1), 3500);
+        const dots = document.querySelectorAll('.dot');
+
+        // Afficher la galerie
+        discoverBtn.addEventListener('click', () => {
+            introSection.classList.add('hidden');
+            setTimeout(() => {
+                gallerySection.classList.add('visible');
+                startAutoplay();
+            }, 600);
+        });
+
+        // Navigation
+        function goToSlide(index) {
+            slides[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
+            currentIndex = index;
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
         }
-    }
 
-    closeModal.addEventListener("click", closeImageModal);
-    imageModal.addEventListener("click", (e) => {
-        if (e.target === imageModal) {
-            closeImageModal();
+        function nextSlide() {
+            goToSlide((currentIndex + 1) % slides.length);
         }
-    });
 
-    // Fermer avec la touche Échap
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && imageModal.classList.contains("active")) {
-            closeImageModal();
+        function prevSlide() {
+            goToSlide((currentIndex - 1 + slides.length) % slides.length);
         }
-    });
 
-    // Gestion du swipe tactile
-    document.addEventListener("touchstart", (e) => {
-        if (sliderContainer.classList.contains("visible")) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoplay();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoplay();
+        });
+
+        // Autoplay
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 3500);
+        }
+
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+
+        function resetAutoplay() {
+            stopAutoplay();
+            startAutoplay();
+        }
+
+        // Modal
+        slides.forEach((slide, index) => {
+            slide.addEventListener('click', () => {
+                const img = slide.querySelector('img');
+                modalImage.src = img.src;
+                modalImage.dataset.index = index;
+                modal.classList.add('active');
+                stopAutoplay();
+            });
+        });
+
+        function closeModal() {
+            modal.classList.remove('active');
+            startAutoplay();
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function modalNextSlide() {
+            let index = parseInt(modalImage.dataset.index);
+            index = (index + 1) % slides.length;
+            modalImage.dataset.index = index;
+            modalImage.src = slides[index].querySelector('img').src;
+        }
+
+        function modalPrevSlide() {
+            let index = parseInt(modalImage.dataset.index);
+            index = (index - 1 + slides.length) % slides.length;
+            modalImage.dataset.index = index;
+            modalImage.src = slides[index].querySelector('img').src;
+        }
+
+        modalNext.addEventListener('click', modalNextSlide);
+        modalPrev.addEventListener('click', modalPrevSlide);
+
+        // Clavier
+        document.addEventListener('keydown', (e) => {
+            if (modal.classList.contains('active')) {
+                if (e.key === 'Escape') closeModal();
+                if (e.key === 'ArrowLeft') modalPrevSlide();
+                if (e.key === 'ArrowRight') modalNextSlide();
+            } else if (gallerySection.classList.contains('visible')) {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoplay();
+                }
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoplay();
+                }
+            }
+        });
+
+        // Touch/swipe pour le slider
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        sliderWrapper.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        }
-    });
+        });
 
-    document.addEventListener("touchend", (e) => {
-        if (sliderContainer.classList.contains("visible") && !imageModal.classList.contains("active")) {
+        sliderWrapper.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].clientX;
-            touchEndY = e.changedTouches[0].clientY;
             handleSwipe();
-        }
-    });
+        });
 
-    function handleSwipe() {
-        const diffX = touchStartX - touchEndX;
-        const diffY = Math.abs(touchStartY - touchEndY);
-        const swipeThreshold = 30;
-        
-        // Vérifier que c'est un swipe horizontal
-        if (diffY < 80 && Math.abs(diffX) > swipeThreshold) {
-            if (diffX > 0) {
-                // Swipe vers la gauche - image suivante
-                clearInterval(sliderInterval);
-                changeSlide(1);
-                sliderInterval = setInterval(() => changeSlide(1), 3500);
-            } else {
-                // Swipe vers la droite - image précédente
-                clearInterval(sliderInterval);
-                changeSlide(-1);
-                sliderInterval = setInterval(() => changeSlide(1), 3500);
+        function handleSwipe() {
+            const diff = touchStartX - touchEndX;
+            const threshold = 50;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                resetAutoplay();
             }
         }
-    }
 
-    // Permettre le clic sur les dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener("click", () => {
-            if (sliderContainer.classList.contains("visible")) {
-                clearInterval(sliderInterval);
-                goToSlide(index);
-                sliderInterval = setInterval(() => changeSlide(1), 3500);
+        // Touch/swipe pour le modal
+        modal.addEventListener('touchstart', (e) => {
+            if (e.target === modalImage) {
+                touchStartX = e.touches[0].clientX;
             }
         });
-    });
-});
-</script>
 
+        modal.addEventListener('touchend', (e) => {
+            if (e.target === modalImage) {
+                touchEndX = e.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+                const threshold = 50;
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        modalNextSlide();
+                    } else {
+                        modalPrevSlide();
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
