@@ -2,29 +2,214 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Une surprise pour toi ❤️</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            font-family: 'Playfair Display', serif;
+            background: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .overlay {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 50px 60px;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: fadeIn 2s ease;
+        }
+
+        h1 {
+            font-family: 'Parisienne', cursive;
+            font-size: 48px;
+            color: #c1121f;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        .signature {
+            font-family: 'Parisienne', cursive;
+            font-size: 26px;
+            color: #c1121f;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bouton pour démarrer le slider */
+        .start-button {
+            background: #c1121f;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(193, 18, 31, 0.3);
+        }
+
+        .start-button:hover {
+            background: #9a0e1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(193, 18, 31, 0.4);
+        }
+
+        .start-button.hidden {
+            display: none;
+        }
+
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin: 30px 0;
+            overflow: hidden;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .slider.visible {
+            display: block;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* Indicateurs de slide */
+        .slider-dots {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .slider-dots.visible {
+            display: flex;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot:hover {
+            background: #999;
+        }
+
+        .dot.active {
+            background: #c1121f;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 30px 25px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .slider {
+                height: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <div class="overlay">
     <div class="card">
-        <h1>Une surprise t’attend… ✨</h1>
+        <h1>Une surprise t'attend… ✨</h1>
         <h2>Direction Paris 🗼</h2>
 
         <p>
             Prépare ta valise,<br>
             une ville magique nous attend.<br>
             Des lumières, des rires, des souvenirs…<br>
-            <strong>Je t’emmène à Paris ❤️</strong>
+            <strong>Je t'emmène à Paris ❤️</strong>
         </p>
 
+        <button class="start-button" id="startBtn">Découvrir la surprise 💝</button>
+
         <!-- SLIDER -->
-        <div class="slider">
+        <div class="slider" id="sliderContainer">
             <img src="carte.png" class="slide active" alt="Localisation">
             <img src="paris1.png" class="slide" alt="Paris">
             <img src="paris2.png" class="slide" alt="Paris">
+        </div>
+
+        <div class="slider-dots" id="sliderDots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
         </div>
 
         <div class="signature">
@@ -34,19 +219,57 @@
     </div>
 </div>
 
-<!-- JS DANS LE HTML (SÉCURISÉ) -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    const startBtn = document.getElementById("startBtn");
+    const sliderContainer = document.getElementById("sliderContainer");
+    const sliderDots = document.getElementById("sliderDots");
     const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".dot");
     let currentSlide = 0;
+    let sliderInterval = null;
 
-    if (slides.length <= 1) return; // pas de slide si 1 image
-
-    setInterval(() => {
+    // Fonction pour changer de slide
+    function changeSlide() {
         slides[currentSlide].classList.remove("active");
+        dots[currentSlide].classList.remove("active");
+        
         currentSlide = (currentSlide + 1) % slides.length;
+        
         slides[currentSlide].classList.add("active");
-    }, 3500);
+        dots[currentSlide].classList.add("active");
+    }
+
+    // Démarrer le slider au clic sur le bouton
+    startBtn.addEventListener("click", () => {
+        startBtn.classList.add("hidden");
+        sliderContainer.classList.add("visible");
+        sliderDots.classList.add("visible");
+        
+        // Démarrer le défilement automatique
+        if (slides.length > 1) {
+            sliderInterval = setInterval(changeSlide, 3500);
+        }
+    });
+
+    // Permettre le clic sur les dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+            if (sliderContainer.classList.contains("visible")) {
+                clearInterval(sliderInterval);
+                
+                slides[currentSlide].classList.remove("active");
+                dots[currentSlide].classList.remove("active");
+                
+                currentSlide = index;
+                
+                slides[currentSlide].classList.add("active");
+                dots[currentSlide].classList.add("active");
+                
+                sliderInterval = setInterval(changeSlide, 3500);
+            }
+        });
+    });
 });
 </script>
 
