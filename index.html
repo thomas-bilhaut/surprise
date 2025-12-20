@@ -137,7 +137,9 @@
             display: none;
             box-shadow: none;
             background: transparent;
-            touch-action: pan-y;
+            touch-action: pan-x;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .slider.visible {
@@ -322,7 +324,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Variables pour le swipe
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
+    let isSwiping = false;
 
     // Fonction pour changer de slide
     function changeSlide(direction = 1) {
@@ -367,31 +372,45 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
     });
 
-    // Gestion du swipe tactile
+    // Gestion du swipe tactile - touchstart
     sliderContainer.addEventListener("touchstart", (e) => {
-        touchStartX = e.changedTouches[0].screenX;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isSwiping = true;
     }, { passive: true });
 
+    // Gestion du swipe tactile - touchmove
+    sliderContainer.addEventListener("touchmove", (e) => {
+        if (!isSwiping) return;
+        touchEndX = e.touches[0].clientX;
+        touchEndY = e.touches[0].clientY;
+    }, { passive: true });
+
+    // Gestion du swipe tactile - touchend
     sliderContainer.addEventListener("touchend", (e) => {
-        touchEndX = e.changedTouches[0].screenX;
+        if (!isSwiping) return;
+        isSwiping = false;
         handleSwipe();
     }, { passive: true });
 
     function handleSwipe() {
-        const swipeThreshold = 50; // Distance minimale pour détecter un swipe
+        const swipeThreshold = 50;
+        const diffX = touchStartX - touchEndX;
+        const diffY = Math.abs(touchStartY - touchEndY);
         
-        if (touchEndX < touchStartX - swipeThreshold) {
-            // Swipe vers la gauche - image suivante
-            clearInterval(sliderInterval);
-            changeSlide(1);
-            sliderInterval = setInterval(() => changeSlide(1), 3500);
-        }
-        
-        if (touchEndX > touchStartX + swipeThreshold) {
-            // Swipe vers la droite - image précédente
-            clearInterval(sliderInterval);
-            changeSlide(-1);
-            sliderInterval = setInterval(() => changeSlide(1), 3500);
+        // Vérifier que c'est un swipe horizontal (et pas vertical)
+        if (diffY < 100) {
+            if (diffX > swipeThreshold) {
+                // Swipe vers la gauche - image suivante
+                clearInterval(sliderInterval);
+                changeSlide(1);
+                sliderInterval = setInterval(() => changeSlide(1), 3500);
+            } else if (diffX < -swipeThreshold) {
+                // Swipe vers la droite - image précédente
+                clearInterval(sliderInterval);
+                changeSlide(-1);
+                sliderInterval = setInterval(() => changeSlide(1), 3500);
+            }
         }
     }
 
