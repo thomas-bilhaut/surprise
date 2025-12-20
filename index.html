@@ -22,7 +22,9 @@
 
         <!-- SLIDER -->
         <div class="slider">
-            <img src="carte.png" class="slide active">
+            <img src="carte.png" class="slide active" alt="Localisation">
+            <img src="paris1.png" class="slide" alt="Paris">
+            <img src="paris2.png" class="slide" alt="Paris">
         </div>
 
         <div class="signature">
@@ -32,20 +34,20 @@
     </div>
 </div>
 
-<!-- JS DIRECTEMENT DANS LE HTML -->
+<!-- JS DANS LE HTML (SÉCURISÉ) -->
 <script>
+document.addEventListener("DOMContentLoaded", () => {
     const slides = document.querySelectorAll(".slide");
     let currentSlide = 0;
 
-    function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove("active"));
-        slides[index].classList.add("active");
-    }
+    if (slides.length <= 1) return; // pas de slide si 1 image
 
     setInterval(() => {
+        slides[currentSlide].classList.remove("active");
         currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }, 3000); // changement toutes les 3 secondes
+        slides[currentSlide].classList.add("active");
+    }, 3500);
+});
 </script>
 
 </body>
