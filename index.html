@@ -137,6 +137,7 @@
             display: none;
             box-shadow: none;
             background: transparent;
+            touch-action: pan-y;
         }
 
         .slider.visible {
@@ -319,12 +320,31 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentSlide = 0;
     let sliderInterval = null;
 
+    // Variables pour le swipe
+    let touchStartX = 0;
+    let touchEndX = 0;
+
     // Fonction pour changer de slide
-    function changeSlide() {
+    function changeSlide(direction = 1) {
         slides[currentSlide].classList.remove("active");
         dots[currentSlide].classList.remove("active");
         
-        currentSlide = (currentSlide + 1) % slides.length;
+        if (direction === 1) {
+            currentSlide = (currentSlide + 1) % slides.length;
+        } else {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        }
+        
+        slides[currentSlide].classList.add("active");
+        dots[currentSlide].classList.add("active");
+    }
+
+    // Fonction pour aller à une slide spécifique
+    function goToSlide(index) {
+        slides[currentSlide].classList.remove("active");
+        dots[currentSlide].classList.remove("active");
+        
+        currentSlide = index;
         
         slides[currentSlide].classList.add("active");
         dots[currentSlide].classList.add("active");
@@ -342,26 +362,46 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Démarrer le défilement automatique
             if (slides.length > 1) {
-                sliderInterval = setInterval(changeSlide, 3500);
+                sliderInterval = setInterval(() => changeSlide(1), 3500);
             }
         }, 500);
     });
+
+    // Gestion du swipe tactile
+    sliderContainer.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    sliderContainer.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // Distance minimale pour détecter un swipe
+        
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // Swipe vers la gauche - image suivante
+            clearInterval(sliderInterval);
+            changeSlide(1);
+            sliderInterval = setInterval(() => changeSlide(1), 3500);
+        }
+        
+        if (touchEndX > touchStartX + swipeThreshold) {
+            // Swipe vers la droite - image précédente
+            clearInterval(sliderInterval);
+            changeSlide(-1);
+            sliderInterval = setInterval(() => changeSlide(1), 3500);
+        }
+    }
 
     // Permettre le clic sur les dots
     dots.forEach((dot, index) => {
         dot.addEventListener("click", () => {
             if (sliderContainer.classList.contains("visible")) {
                 clearInterval(sliderInterval);
-                
-                slides[currentSlide].classList.remove("active");
-                dots[currentSlide].classList.remove("active");
-                
-                currentSlide = index;
-                
-                slides[currentSlide].classList.add("active");
-                dots[currentSlide].classList.add("active");
-                
-                sliderInterval = setInterval(changeSlide, 3500);
+                goToSlide(index);
+                sliderInterval = setInterval(() => changeSlide(1), 3500);
             }
         });
     });
