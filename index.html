@@ -8,23 +8,47 @@
 </head>
 <body>
 
-    <div class="overlay">
-        <div class="card">
-            <h1>Une surprise t’attend… ✨</h1>
-            <h2>Direction Paris 🗼</h2>
+<div class="overlay">
+    <div class="card">
+        <h1>Une surprise t’attend… ✨</h1>
+        <h2>Direction Paris 🗼</h2>
 
-            <p>
-                Prépare ta valise,<br>
-                une ville magique nous attend.<br>
-                Des lumières, des rires, des souvenirs…<br>
-                <strong>Je t’emmène à Paris ❤️</strong>
-            </p>
+        <p>
+            Prépare ta valise,<br>
+            une ville magique nous attend.<br>
+            Des lumières, des rires, des souvenirs…<br>
+            <strong>Je t’emmène à Paris ❤️</strong>
+        </p>
 
-            <div class="signature"><br>
-                Thomas 💌
-            </div>
+        <!-- SLIDER -->
+        <div class="slider">
+            <img src="images/paris1.jpg" class="slide active">
+            <img src="images/paris2.jpg" class="slide">
+            <img src="images/paris3.jpg" class="slide">
+        </div>
+
+        <div class="signature">
+            Avec tout mon amour,<br>
+            Thomas 💌
         </div>
     </div>
+</div>
+
+<!-- JS DIRECTEMENT DANS LE HTML -->
+<script>
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+    }
+
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }, 3000); // changement toutes les 3 secondes
+</script>
 
 </body>
 </html>
