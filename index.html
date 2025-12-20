@@ -159,6 +159,67 @@
             opacity: 0;
             transition: opacity 1.2s ease-in-out;
             filter: brightness(1.05) contrast(1.05);
+            cursor: pointer;
+        }
+
+        /* Modal pour image agrandie */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .image-modal img {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(193, 18, 31, 0.8);
+            transform: rotate(90deg);
         }
 
         .slide.active {
@@ -321,6 +382,12 @@
     </div>
 </div>
 
+<!-- Modal pour agrandir l'image -->
+<div class="image-modal" id="imageModal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <img id="modalImage" src="" alt="Image agrandie">
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const startBtn = document.getElementById("startBtn");
@@ -329,6 +396,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const sliderDots = document.getElementById("sliderDots");
     const slides = document.querySelectorAll(".slide");
     const dots = document.querySelectorAll(".dot");
+    const imageModal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const closeModal = document.getElementById("closeModal");
     let currentSlide = 0;
     let sliderInterval = null;
 
@@ -381,6 +451,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
     });
 
+    // Agrandir l'image au clic
+    slides.forEach((slide) => {
+        slide.addEventListener("click", (e) => {
+            e.stopPropagation();
+            modalImage.src = slide.src;
+            imageModal.classList.add("active");
+            // Pause l'auto-play pendant la visualisation
+            clearInterval(sliderInterval);
+        });
+    });
+
+    // Fermer le modal
+    function closeImageModal() {
+        imageModal.classList.remove("active");
+        // Relancer l'auto-play
+        if (slides.length > 1) {
+            sliderInterval = setInterval(() => changeSlide(1), 3500);
+        }
+    }
+
+    closeModal.addEventListener("click", closeImageModal);
+    imageModal.addEventListener("click", (e) => {
+        if (e.target === imageModal) {
+            closeImageModal();
+        }
+    });
+
+    // Fermer avec la touche Échap
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && imageModal.classList.contains("active")) {
+            closeImageModal();
+        }
+    });
+
     // Gestion du swipe tactile
     document.addEventListener("touchstart", (e) => {
         if (sliderContainer.classList.contains("visible")) {
@@ -390,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("touchend", (e) => {
-        if (sliderContainer.classList.contains("visible")) {
+        if (sliderContainer.classList.contains("visible") && !imageModal.classList.contains("active")) {
             touchEndX = e.changedTouches[0].clientX;
             touchEndY = e.changedTouches[0].clientY;
             handleSwipe();
